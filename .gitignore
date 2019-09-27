@@ -1,9 +1,7 @@
 .DS_Store
 node_modules
 /dist
-venv/bin/*
-venv/include/*
-venv/lib/*
+venv/*
 
 # local env files
 .env.local

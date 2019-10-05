@@ -5,7 +5,7 @@
       color="indigo"
       dark
     >
-      <v-icon class="mx-4">mdi-billiards</v-icon>
+      <v-icon class="mx-4" color="yellow">mdi-corn</v-icon>
       <v-toolbar-title class="mr-12 align-center">Project-One</v-toolbar-title>
     </v-app-bar>
 
@@ -65,6 +65,7 @@
                   ></v-text-field>
                 </v-form>
               </v-card-text>
+              <v-alert v-if="error" class="error" style="text-align: center;">Algo está errado!!!</v-alert>
               <v-card-actions>
                 <div class="flex-grow-1"></div>
                 <v-btn color="secondary" @click="checkForm">Login</v-btn>
@@ -81,7 +82,7 @@
 </template>
 
 <script>
-// import axios from 'axios';
+import Timeline from './data/db.json';
 
   export default {
     props: {
@@ -91,20 +92,24 @@
       return {
       login: null,
       password: null,
+      error: false,
       };
     },
     methods: {
       checkForm() {
         if ((this.login && this.login.length <= 50) && (this.password && this.password.length <= 50)) {
-          // var login = this.login
-          // var password = this.password
-          this.$http.post('http://jsonplaceholder.typicode.com/posts', {
-            title: 'beleza, mano tlg',
-            body: 'hoje eu estou feliz a bessa',
-            userid: 1,
-          }).then(function(data){
-            console.log(data);
-          });
+          for(var i=0; i < Timeline.length; i++){
+            if(this.login == Timeline[i].login && this.password == Timeline[i].senha){
+              break;
+            }
+            else{
+              this.error = true;
+              break;
+            }
+          }
+          
+        }else{
+          this.error = true;
         }
       }
     },

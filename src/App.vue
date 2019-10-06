@@ -105,6 +105,7 @@
       password: null,
       errorlogin: false,
       errorblank: false,
+      validation:false,
       };
     },
     methods: {
@@ -114,12 +115,13 @@
         if ((this.login && this.login.length >= 2) && (this.password && this.password.length >=2)) {
           for(var i=0; i < Timeline.length; i++){
             if(this.login == Timeline[i].login && this.password == Timeline[i].senha){
+              this.validation = true;
+              alert('ok');
               break;
             }
-            else{
-              this.errorlogin = true;
-              break;
-            }
+          }
+          if (this.validation == false) {
+            errorlogin = true;
           }
         } else {
           this.errorblank = true;

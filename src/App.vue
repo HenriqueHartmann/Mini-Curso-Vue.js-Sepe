@@ -6,7 +6,7 @@
         id="container-app"
         fluid
       >
-        <v-overlay :value="overlay" :opacity="'0.98'">
+        <v-overlay :value="overlay" :opacity="'1'">
           <v-progress-circular
             indeterminate
             color="red"
@@ -41,6 +41,7 @@
               <v-text-field
                 outlined
                 v-model="login"
+                v-on:keyup="btnStatus"
                 label="NOME DE USUÁRIO"
                 name="login"
                 type="text"
@@ -48,6 +49,7 @@
               <v-text-field
                     outlined
                     v-model="password"
+                    v-on:keyup="btnStatus"
                     label="SENHA"
                     name="password"
                     type="password"
@@ -73,6 +75,7 @@
           <v-card-actions class="justify-center">
             <v-btn
               id="btn-login"
+              v-bind:disabled="btndisable"
               fab
               color="#C62828"
               large
@@ -107,6 +110,7 @@
     },
     data() {
       return {
+      btndisable: true,
       overlay: false,  
       login: null,
       password: null,
@@ -127,20 +131,22 @@
         this.overlay = true;
         this.errorlogin = false;
         this.errorblank = false;
-        if ((this.login && this.login.length >= 2) && (this.password && this.password.length >=2)) {
-          for(var i=0; i < Timeline.length; i++){
-            if(this.login == Timeline[i].login && this.password == Timeline[i].senha){
-              this.validation = true;
-              break;
-            }
+        for(var i=0; i < Timeline.length; i++){
+          if(this.login == Timeline[i].login && this.password == Timeline[i].senha){
+            this.validation = true;
+            break;
           }
-          if (this.validation == false) {
-            this.errorlogin = true;
-          }
-        } else {
-          this.errorblank = true;
         }
-      }
+        if (this.validation == false) {
+          this.errorlogin = true;
+        }
+      },
+      btnStatus() {
+        this.errorblank = true;
+        if (this.login.length >= 2 && this.password.length >= 2) {
+          this.btndisable = false;
+        }
+      },
     },
   }
 </script>

@@ -6,6 +6,12 @@
         id="container-app"
         fluid
       >
+        <v-overlay :value="overlay" :opacity="'0.98'">
+          <v-progress-circular
+            indeterminate
+            color="red"
+          ></v-progress-circular>
+        </v-overlay>
         <v-col
           cols="12"
           md="4"
@@ -101,27 +107,35 @@
     },
     data() {
       return {
+      overlay: false,  
       login: null,
       password: null,
       errorlogin: false,
       errorblank: false,
-      validation:false,
+      validation: false,
       };
+    },
+    watch: {
+      overlay (val) {
+        val && setTimeout(() => {
+          this.overlay = false
+        }, 1000)
+      },
     },
     methods: {
       checkForm() {
+        this.overlay = true;
         this.errorlogin = false;
         this.errorblank = false;
         if ((this.login && this.login.length >= 2) && (this.password && this.password.length >=2)) {
           for(var i=0; i < Timeline.length; i++){
             if(this.login == Timeline[i].login && this.password == Timeline[i].senha){
               this.validation = true;
-              alert('ok');
               break;
             }
           }
           if (this.validation == false) {
-            errorlogin = true;
+            this.errorlogin = true;
           }
         } else {
           this.errorblank = true;

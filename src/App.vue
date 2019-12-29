@@ -41,18 +41,9 @@
               <v-text-field
                 outlined
                 v-model="login"
-                v-on:keyup="btnStatus"
                 label="NOME DE USUÁRIO"
                 name="login"
                 type="text"
-              />
-              <v-text-field
-                    outlined
-                    v-model="password"
-                    v-on:keyup="btnStatus"
-                    label="SENHA"
-                    name="password"
-                    type="password"
               />
             </v-form>
           </v-card-text>
@@ -61,11 +52,11 @@
             type="error"
           >
             <v-row align="center">
-              Suas Credenciais de Login não coincidem com uma conta em nosso sistema
+              Suas Credenciais de Login não coincidem com nenhum dado em nosso sistema
             </v-row>
           </v-alert>
           <v-alert
-            v-if="errorblank" 
+            v-if="blank" 
             type="error"
           >
             <v-row align="center">
@@ -75,7 +66,7 @@
           <v-card-actions class="justify-center">
             <v-btn
               id="btn-login"
-              v-bind:disabled="btndisable"
+              v-bind:disabled="blank"
               fab
               color="#C62828"
               large
@@ -101,7 +92,7 @@
 </template>
 
 <script>
-  import Timeline from './data/db.json';
+  import Users from './data/db.json';
   require('./assets/style.css');
 
   export default {
@@ -110,41 +101,36 @@
     },
     data() {
       return {
-      btndisable: true,
       overlay: false,  
-      login: null,
-      password: null,
+      login: '',
       errorlogin: false,
-      errorblank: false,
       validation: false,
       };
+    },
+    computed: {
+      blank () {
+        return this.login.length <= 2
+      }
     },
     watch: {
       overlay (val) {
         val && setTimeout(() => {
           this.overlay = false
         }, 1000)
-      },
+      }
     },
     methods: {
       checkForm() {
         this.overlay = true;
         this.errorlogin = false;
-        this.errorblank = false;
-        for(var i=0; i < Timeline.length; i++){
-          if(this.login == Timeline[i].login && this.password == Timeline[i].senha){
+        for(var i=0; i < Users.length; i++){
+          if(this.login == Users[i].login){
             this.validation = true;
             break;
           }
         }
         if (this.validation == false) {
           this.errorlogin = true;
-        }
-      },
-      btnStatus() {
-        this.errorblank = true;
-        if (this.login.length >= 2 && this.password.length >= 2) {
-          this.btndisable = false;
         }
       },
     },
